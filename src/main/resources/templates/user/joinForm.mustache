@@ -1,0 +1,26 @@
+{{> /layout/header}}
+<div class="container p-5">
+    <!-- 요청을 하면 localhost:8080/join POST로 요청됨
+    username=사용자입력값&password=사용자값&email=사용자입력값 -->
+    <div class="card">
+        <div class="card-header"><b>회원정보를 입력해 주세요</b></div>
+        <div class="card-body">
+            <form action="/join" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="이름을 입력해 주세요" name="username">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="비밀번호를 입력해 주세요" name="password">
+                </div>
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="email을 입력해 주세요" name="email">
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <button type="submit" class="btn btn-primary btn-sm">회원가입</button>
+                    <a href="/logo" class="btn btn-danger btn-sm margin-left: 5px; ">돌아가기</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{> /layout/footer}}
