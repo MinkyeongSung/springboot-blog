@@ -2,7 +2,6 @@ package shop.mtcoding.blog.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.h2.engine.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,6 +86,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate(); // 세션 무효화 (내 서랍 비우기)
         return "redirect:/";
     }
 

@@ -11,8 +11,8 @@ import shop.mtcoding.blog.dto.JoinDTO;
 import shop.mtcoding.blog.dto.LoginDTO;
 import shop.mtcoding.blog.model.User;
 
-//BoardController, UserController, UserRepository (내가 직접 띄움 IOC)
-//EntityManager, HttpSession (Spring이 띄움)
+// BoardController, UserController, UserRepository
+// EntityManager, HttpSession
 @Repository
 public class UserRepository {
 
@@ -23,18 +23,18 @@ public class UserRepository {
         Query query = em.createNativeQuery("select * from user_tb where username=:username and password=:password",
                 User.class);
         query.setParameter("username", loginDTO.getUsername());
-        query.setParameter("username", loginDTO.getUsername());
+        query.setParameter("password", loginDTO.getPassword());
         return (User) query.getSingleResult();
     }
 
     @Transactional
     public void save(JoinDTO joinDTO) {
-        Query query = em.createNativeQuery(
-                "insert into user_tb(username, password, email) values(:username, :password, :email)");
+        Query query = em
+                .createNativeQuery(
+                        "insert into user_tb(username, password, email) values(:username, :password, :email)");
         query.setParameter("username", joinDTO.getUsername());
         query.setParameter("password", joinDTO.getPassword());
         query.setParameter("email", joinDTO.getEmail());
         query.executeUpdate();
     }
-
 }
