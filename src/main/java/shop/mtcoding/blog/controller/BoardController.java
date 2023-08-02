@@ -95,7 +95,20 @@ public class BoardController {
     // localhost:8080/board/1
     // localhost:8080/board/50
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id) {
-        return "board/detail";
+    public String detail(@PathVariable Integer id, HttpServletRequest request) { // C
+        User sessionUser = (User) session.getAttribute("sessionUser"); // 세션접근
+        Board board = boardRepository.findById(id); // M
+
+        boolean pageOwner = false;
+        if (sessionUser != null) {
+            System.out.println("테스트 세션 ID: " + sessionUser.getId());
+            System.out.println("테스트 세션 board.getUser().getId(): " + board.getUser().getId());
+            pageOwner = sessionUser.getId() == board.getUser().getId();
+        } else {
+        }
+
+        request.setAttribute("board", board);
+        request.setAttribute("pageOwner", pageOwner);
+        return "board/detail"; // V
     }
 }
