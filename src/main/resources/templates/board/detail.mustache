@@ -6,7 +6,12 @@
     {{#pageOwner}}
     <div class="d-flex justify-content-end">
         <button class="btn btn-secondary me-1">수정</button>
-        <button class="btn btn-danger">삭제</button>
+
+        <!-- 홈 태그 안에 있으면 타입이 서브밋(submit) 밖에 있으면 버튼(button) -->
+        <form action="/board/{{board.id}}/delete" method="post">
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+
     </div>
     {{/pageOwner}}
     <!-- 게시글내용 -->
