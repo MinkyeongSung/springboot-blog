@@ -1,13 +1,16 @@
 package shop.mtcoding.blog.repository;
 
-import javax.persistence.Query;
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.ReplyWriteDTO;
+import shop.mtcoding.blog.model.Reply;
 
 // 메모리에 떠서 사용할 수 있는 것들
 // UserController, BoardController, ReplyController, ErrorControoller
@@ -18,6 +21,12 @@ public class ReplyRepository {
 
     @Autowired
     private EntityManager em;
+
+    public List<Reply> findByBoardId(Integer boardId) {
+        Query query = em.createNativeQuery("select * from reply_tb where board_id = :boardId", Reply.class);
+        query.setParameter("boardId", boardId);
+        return query.getResultList();
+    }
 
     @Transactional
     public void save(ReplyWriteDTO replyWriteDTO, Integer userId) {
