@@ -25,11 +25,13 @@
         </div>
     </div>
     {{/board}}
+
     <!-- 댓글 -->
     <div class="card mt-3">
         <!-- 댓글등록 -->
         <div class="card-body">
             <form action="/reply/save" method="post">
+                <input type= hidden value={{board.id}} name = "boardId" >
                 <textarea class="form-control" rows="2" name="comment"></textarea>
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-outline-primary mt-1">댓글등록</button>

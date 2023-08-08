@@ -11,10 +11,10 @@ import lombok.Setter;
  * 4. MIME타입 : x-www-form-urlencoded
  * 5. 응답 : 수정한 페이지 detail을 응답함.
  */
-
 @Getter
 @Setter
 public class UpdateDTO {
+    private int id;
     private String title;
     private String content;
 }
