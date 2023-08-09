@@ -2,6 +2,7 @@ package shop.mtcoding.blog.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class UserController {
     public HttpSession session; // request는 가방, session은 서랍
 
     @GetMapping("/check")
-    public ResponseEntity<String> check(String username) {
-        User user = userRepository.findByUsername(username);
+    public ResponseEntity<String> check(LoginDTO loginDTO) {
+        User user = userRepository.findByUsername(loginDTO);
         if (user != null) {
             return new ResponseEntity<String>("유저네임이 중복 되었습니다", HttpStatus.BAD_REQUEST);
         }
@@ -42,12 +43,17 @@ public class UserController {
             return "redirect:/40x";
         }
         // 핵심 기능
-        try {
-            User user = userRepository.findByUsernameAndPassword(loginDTO);
+        System.out.println("테스트 1 :" + loginDTO.getPassword());
+        User user = userRepository.findByUsername(loginDTO);
+
+        boolean isVaild = BCrypt.checkpw(loginDTO.getPassword(), user.getPassword());
+
+        // int isVaild = 1;
+        if (isVaild == true) {
+            // if (isVaild == 1) {
             session.setAttribute("sessionUser", user);
             return "redirect:/";
-
-        } catch (Exception e) {
+        } else {
             return "redirect:/exLogin";
         }
     }
