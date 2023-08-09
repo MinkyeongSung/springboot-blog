@@ -52,8 +52,16 @@ public class BoardController {
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable Integer id, UpdateDTO updateDTO) {
         // 1. 인증 검사
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
 
         // 2. 권한 체크
+        Board board = boardRepository.findById(id);
+        if (board.getUser().getId() != sessionUser.getId()) {
+            return "redirect:/40x"; // 403 권한없음
+        }
 
         // 3. 핵심 로직
         // update board_tb set title = :title, content = :content where id = :id
@@ -65,11 +73,18 @@ public class BoardController {
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
         // 1. 인증 검사
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
 
         // 2. 권한 체크
+        Board board = boardRepository.findById(id);
+        if (board.getUser().getId() != sessionUser.getId()) {
+            return "redirect:/40x"; // 403 권한없음
+        }
 
         // 3. 핵심 로직
-        Board board = boardRepository.findById(id);
         request.setAttribute("board", board);
 
         return "board/updateForm";
@@ -161,26 +176,24 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    // localhost:8080/board/1
-    // localhost:8080/board/50
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) { // C
         User sessionUser = (User) session.getAttribute("sessionUser"); // 세션접근
-        // Board board = boardRepository.findById(id); // M
-        List<BoardDetailDTO> dtos = boardRepository.findByIdJoinReply(id);
+
+        List<BoardDetailDTO> dtos = null;
+        if (sessionUser == null) {
+            dtos = boardRepository.findByIdJoinReply(id, null);
+        } else {
+            dtos = boardRepository.findByIdJoinReply(id, sessionUser.getId());
+        }
 
         boolean pageOwner = false;
         if (sessionUser != null) {
-            // System.out.println("테스트 세션 ID : " + sessionUser.getId());
-            // System.out.println("테스트 세션 board.getUser().getId() : " +
-            // board.getUser().getId());
             pageOwner = sessionUser.getId() == dtos.get(0).getBoardUserId();
-            // System.out.println("테스트 : pageOwner : " + pageOwner);
         }
 
         request.setAttribute("dtos", dtos);
         request.setAttribute("pageOwner", pageOwner);
-        request.setAttribute("replyOwner", true);
         return "board/detail"; // V
     }
 }
