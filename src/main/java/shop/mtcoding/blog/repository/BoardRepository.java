@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -114,6 +115,7 @@ public class BoardRepository {
 
     @Transactional
     public void update(UpdateDTO updateDTO, Integer id) {
+
         Query query = em.createNativeQuery("update board_tb set title = :title, content = :content where id = :id");
         query.setParameter("id", id);
         query.setParameter("title", updateDTO.getTitle());

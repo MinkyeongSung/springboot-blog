@@ -22,40 +22,56 @@ public class UserRepository {
     @Autowired
     private EntityManager em;
 
-    public User findByUsername(LoginDTO loginDTO) {
+    public User findByUsername(String username) {
         try {
             Query query = em.createNativeQuery("select * from user_tb where username=:username",
                     User.class);
-            query.setParameter("username", loginDTO.getUsername());
+            query.setParameter("username", username);
             return (User) query.getSingleResult();
         } catch (Exception e) {
             return null;
         }
+
+    }
+
+    // x
+    public User findByUsernameAndPassword(LoginDTO loginDTO) {
+        Query query = em.createNativeQuery("select * from user_tb where username=:username and password=:password",
+                User.class);
+        query.setParameter("username", loginDTO.getUsername());
+        query.setParameter("password", loginDTO.getPassword());
+        return (User) query.getSingleResult();
     }
 
     @Transactional
     public void save(JoinDTO joinDTO) {
-
-        String encPassword = BCrypt.hashpw(joinDTO.getPassword(), BCrypt.gensalt());
-        System.out.println("encPassword : " + encPassword);
-
+        System.out.println("테스트 :" + 1);
         Query query = em
                 .createNativeQuery(
                         "insert into user_tb(username, password, email) values(:username, :password, :email)");
+        System.out.println("테스트 :" + 2);
         query.setParameter("username", joinDTO.getUsername());
-        query.setParameter("password", encPassword);
+        query.setParameter("password", joinDTO.getPassword());
         query.setParameter("email", joinDTO.getEmail());
-
-        query.executeUpdate();
+        System.out.println("테스트 :" + 3);
+        query.executeUpdate(); // 쿼리를 전송 (DBMS)
+        System.out.println("테스트 :" + 4);
     }
 
-    public static void update(UpdateDTO updateDTO, Integer id) {
-    }
+    // @Transactional
+    // public void save(JoinDTO joinDTO) {
 
-    public User findById(Integer id) {
-        Query query = em.createNativeQuery("select * from board_tb where id = :id", User.class);
-        query.setParameter("id", id);
-        User user = (User) query.getSingleResult();
-        return user;
-    }
+    // String encPassword = BCrypt.hashpw(joinDTO.getPassword(), BCrypt.gensalt());
+    // System.out.println("encPassword : " + encPassword);
+
+    // Query query = em
+    // .createNativeQuery(
+    // "insert into user_tb(username, password, email) values(:username, :password,
+    // :email)");
+    // query.setParameter("username", joinDTO.getUsername());
+    // query.setParameter("password", encPassword);
+    // query.setParameter("email", joinDTO.getEmail());
+
+    // query.executeUpdate();
+    // }
 }

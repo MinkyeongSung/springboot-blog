@@ -1,26 +1,30 @@
-{{> /layout/header}}
+{{> layout/header}}
+
 <div class="container p-5">
+
     <!-- 요청을 하면 localhost:8080/join POST로 요청됨
     username=사용자입력값&password=사용자값&email=사용자입력값 -->
+
     <div class="card">
         <div class="card-header"><b>회원정보수정</b></div>
         <div class="card-body">
             <form action="/user/update" method="post" enctype="application/x-www-form-urlencoded">
-                <div>username</div>
-                <div class="mb-3 mt-2">
-                    <input type="text" class="form-control" placeholder="${username}" name="username" disabled>
+                <div class="mb-3">
+                    <input value="{{user.username}}" type="text" class="form-control" placeholder="Enter username"
+                        name="username" disabled>
                 </div>
-                <div>password</div>
-                <div class="mb-3 mt-2">
-                    <input type="password" class="form-control" placeholder="변경 할 비밀번호를 입력하세요." name="password">
+                <div class="mb-3">
+                    <input value="" type="password" class="form-control" placeholder="Enter password" name="password"
+                        required>
                 </div>
-                <div>email</div>
-                <div class="mb-3 mt-2">
-                    <input type="email" class="form-control" placeholder="${email}" name="email" disabled>
+                <div class="mb-3">
+                    <input value="{{user.email}}" type="email" class="form-control" placeholder="Enter email"
+                        name="email" disabled>
                 </div>
-                <button type="submit" class="btn btn-primary mb-3">수정완료</button>
+                <button type="submit" class="btn btn-primary form-control">회원정보수정</button>
             </form>
         </div>
     </div>
 </div>
-{{> /layout/footer}}
+
+{{> layout/footer}}
