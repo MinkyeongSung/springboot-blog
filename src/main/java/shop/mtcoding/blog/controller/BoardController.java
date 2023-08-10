@@ -117,23 +117,30 @@ public class BoardController {
     // http://localhost:8080?num=4
     @GetMapping({ "/", "/board" })
     public String index(
+
+            @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") Integer page,
             HttpServletRequest request) {
         // 1. 유효성 검사 X
+
         // 2. 인증검사 X
 
-        List<Board> boardList = boardRepository.findAll(page); // page = 1
-        int totalCount = boardRepository.count(); // totalCount = 5
+        List<Board> boardList = null;
+        int totalCount = 0;
+        request.setAttribute("keyword", keyword); // 공백 or 값있음
+        if (keyword.isBlank()) {
+            boardList = boardRepository.findAll(page); // page = 1
+            totalCount = boardRepository.count();
+        } else {
+            boardList = boardRepository.findAll(page, keyword); // page = 1
+            totalCount = boardRepository.count(keyword);
+        }
 
-        // System.out.println("테스트 : totalCount :" + totalCount);
         int totalPage = totalCount / 3; // totalPage = 1
         if (totalCount % 3 > 0) {
             totalPage = totalPage + 1; // totalPage = 2
         }
         boolean last = totalPage - 1 == page;
-
-        // System.out.println("테스트 :" + boardList.size());
-        // System.out.println("테스트 :" + boardList.get(0).getTitle());
 
         request.setAttribute("boardList", boardList);
         request.setAttribute("prevPage", page - 1);
