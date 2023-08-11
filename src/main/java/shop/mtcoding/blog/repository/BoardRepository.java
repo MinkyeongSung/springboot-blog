@@ -136,7 +136,6 @@ public class BoardRepository {
 
     @Transactional
     public void update(UpdateDTO updateDTO, Integer id) {
-
         Query query = em.createNativeQuery("update board_tb set title = :title, content = :content where id = :id");
         query.setParameter("id", id);
         query.setParameter("title", updateDTO.getTitle());
